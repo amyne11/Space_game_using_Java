@@ -1,7 +1,7 @@
 package selfish.deck;
 import selfish.GameException;
 public class GameDeck extends Deck {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5L;
 
     public static final String OXYGEN_CARD = "Oxygen";
     public static final String LASER_BLAST_CARD = "Laser Blast";
@@ -24,5 +24,12 @@ public class GameDeck extends Deck {
             e.printStackTrace();
         }
 
+    }
+
+
+
+    public void discard(Card card) {
+        // Add the card to the discard pile
+        cards.add(card);
     }
 }

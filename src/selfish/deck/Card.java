@@ -4,7 +4,7 @@ package selfish.deck;
 import java.io.Serializable;
 
 public class Card implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7L;
 
     private String name;
     private String description;
@@ -14,7 +14,9 @@ public class Card implements Serializable {
         this.description = description;
     }
 
-    
+    public String getName() {
+        return name;
+    }
 
     public String getDescription() {
         return description;

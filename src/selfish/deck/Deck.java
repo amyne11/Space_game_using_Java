@@ -12,6 +12,7 @@ public abstract class Deck implements Serializable {
     private static final long serialVersionUID = 4L;
     // attributes, constructors, methods
     protected List<Card> cards;
+    protected List<Card> discards;
 
     // Empty constructor
     public Deck() {

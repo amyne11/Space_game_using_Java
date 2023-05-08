@@ -3,7 +3,7 @@ package selfish.deck;
 
 // Oxygen.java
 public class Oxygen extends Card {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     private int value;
 

@@ -6,14 +6,22 @@ import java.io.Serializable;
 import java.io.*;
 import java.util.ArrayList;
 import selfish.Astronaut;
-import selfish.deck.Card;
 import selfish.deck.Oxygen;
+import java.util.List;
+import java.util.Queue;
+
+import selfish.deck.Card;
+
+import java.util.LinkedList;
 
 public class GameEngine implements Serializable{
     // GameEngine implementation will go here
     private static final long serialVersionUID = 2L;
-    private ArrayList<Astronaut> activePlayers;
+    private Queue<Astronaut> activePlayers = new LinkedList<>();
+
     private Astronaut currentPlayer;
+    private List<Astronaut> corpses = new ArrayList<>();
+
 private GameDeck gameDeck;
 private GameDeck gameDiscard;
 private SpaceDeck spaceDeck;
@@ -21,7 +29,6 @@ private SpaceDeck spaceDiscard;
 
 public GameEngine() {
     this(new Random().nextLong());
-    activePlayers = new ArrayList<>();
 }
 public GameEngine(long seed) {
     gameDeck = new GameDeck("Desktop/COMP16421/comp16412-coursework-2__y54754ae/io/ActionsCards.txt");
@@ -64,20 +71,20 @@ public Astronaut getCurrentPlayer() {
     return currentPlayer;
 }
 
-public ArrayList<Astronaut> getActivePlayers() {
+public Queue<Astronaut> getActivePlayers() {
     return activePlayers;
 }
 public void startTurn() {
     if (activePlayers.size() > 0) {
-        currentPlayer = activePlayers.get(0);
+        currentPlayer = activePlayers.peek();
     }
 }
 
 public void endTurn() {
     if (activePlayers.size() > 1) {
-        Astronaut removedPlayer = activePlayers.remove(0);
+        Astronaut removedPlayer = activePlayers.poll();
         activePlayers.add(removedPlayer);
-        currentPlayer = activePlayers.get(0);
+        currentPlayer = activePlayers.peek();
     }
 }
 public void startGame() {
@@ -108,6 +115,38 @@ public void splitOxygen() {
     currentPlayer.addToHand(singleOxygen2);
 }
 
+public List<Astronaut> getAllPlayers() {
+    List<Astronaut> allPlayers = new ArrayList<>(activePlayers);
+    allPlayers.addAll(corpses);
+    return allPlayers;
+}
+
+public int getFullPlayerCount() {
+    return activePlayers.size() + corpses.size();
+}
+
+public void killPlayer(Astronaut player) {
+    if (!activePlayers.remove(player)) {
+        throw new IllegalStateException("Player not found in active players.");
+    }
+    corpses.add(player);
+}
+public void discardOxygen(Oxygen oxygen) {
+    gameDiscard.discard(oxygen);
+}
+
+public boolean gameOver() {
+    // The game is over if there's only one player left alive or all players are dead.
+    return activePlayers.size() <= 1;
+}
+
+public Astronaut getWinner() {
+    if (activePlayers.size() == 1) {
+        return activePlayers.peek();
+    } else {
+        return null;
+    }
+}
 
 
 
