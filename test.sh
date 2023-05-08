@@ -1,4 +1,5 @@
 # For the tests, compile everything into the bin firectory
+setopt +o nomatch
 
 # Remove previously compiled code
 rm ./bin/*.class ./bin/selfish/*.class ./bin/selfish/deck/*.class ./bin/test/*/*.class
