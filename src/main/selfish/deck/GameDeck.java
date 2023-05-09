@@ -1,4 +1,4 @@
-package selfish.deck;
+package src.selfish.deck;
 import selfish.GameException;
 public class GameDeck extends Deck {
     private static final long serialVersionUID = 5L;
