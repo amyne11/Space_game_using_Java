@@ -150,7 +150,9 @@ public Astronaut getWinner() {
 
 
 
-
+public void addToGameDiscard(Card card) {
+    this.gameDiscard.add(card);
+}
 
 
 

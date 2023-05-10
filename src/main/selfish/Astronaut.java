@@ -9,46 +9,56 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 import java.io.Serializable;
+import java.util.Collection;
+
 
 /**
  * Represents an Astronaut in the game, including their hand, track, and game state.
  */
-public class Astronaut implements Comparable<Astronaut> {
-    private String name;
+public class Astronaut implements Serializable {
+    private GameEngine game;
     private List<Card> actions = new ArrayList<>();
     private List<Oxygen> oxygens = new ArrayList<>();
-    private List<Card> track = new ArrayList<>();
-    private GameEngine game;
+    private String name;
+    private Collection<Card> track = new ArrayList<>();
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Constructs a new Astronaut with the specified name.
-     *
-     * @param name the name of the astronaut
-     */
-    public Astronaut(String name) {
+    public Astronaut(String name, GameEngine game) {
         this.name = name;
+        this.game = game;
     }
 
-    /**
-     * Gets the name of the astronaut.
-     *
-     * @return the name of the astronaut
-     */
-    public String getName() {
-        return name;
+    public void addToHand(Card card) {
+        if (card instanceof Oxygen) {
+            oxygens.add((Oxygen) card);
+        } else {
+            actions.add(card);
+        }
     }
 
-    @Override
-    public String toString() {
-        return name;
+    public void addToTrack(Card card) {
+        track.add(card);
     }
 
-    /**
-     * Gets a list of all cards in the astronaut's hand.
-     *
-     * @return a list of all cards in the astronaut's hand
-     */
+    public int breathe() {
+        if (oxygens.size() > 0) {
+            game.addToGameDiscard(oxygens.remove(0));
+        }
+        return oxygens.size();
+    }
+
+    public int distanceFromShip() {
+        return track.size();
+    }
+
+    public List<Card> getActions() {
+        return new ArrayList<>(actions);
+    }
+
+    public String getActionsStr(boolean enumerated, boolean excludeShields) {
+        // TODO: Need clarification. What does enumerated and excludeShields mean here?
+    }
+
     public List<Card> getHand() {
         List<Card> hand = new ArrayList<>();
         hand.addAll(actions);
@@ -56,79 +66,126 @@ public class Astronaut implements Comparable<Astronaut> {
         return hand;
     }
 
-    /**
-     * Removes and returns a card with the specified name from the astronaut's hand.
-     *
-     * @param cardName the name of the card to remove
-     * @return the removed card, or null if the card was not found
-     */
-    public Card removeCardWithName(String cardName) {
-        Card foundCard = null;
-        for (Iterator<Card> iterator = getHand().iterator(); iterator.hasNext(); ) {
-            Card card = iterator.next();
-            if (card.getName().equals(cardName)) {
-                foundCard = card;
-                iterator.remove();
-                break;
+    public String getHandStr() {
+        StringBuilder sb = new StringBuilder();
+        for (Card card : actions) {
+            sb.append(card.getName()).append("\n");
+        }
+        for (Oxygen oxygen : oxygens) {
+            sb.append(oxygen.getName()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    public Collection<Card> getTrack() {
+        return new ArrayList<>(track);
+    }
+
+    public void hack(Card card) {
+        this.actions.remove(card);
+        this.oxygens.remove(card);
+    }
+
+    public Card hack(String cardName) {
+        for (Card card : actions) {
+            if (card.toString().equals(cardName)) {
+                actions.remove(card);
+                return card;
             }
         }
-        return foundCard;
+        for (Oxygen oxygen : oxygens) {
+            if (oxygen.toString().equals(cardName)) {
+                oxygens.remove(oxygen);
+                return oxygen;
+            }
+        }
+        return null;
+    }
+    
+
+    public int hasCard(String cardName) {
+        int count = 0;
+        for (Card card : actions) {
+            if (card.toString().equals(cardName)) {
+                count++;
+            }
+        }
+        for (Oxygen oxygen : oxygens) {
+            if (oxygen.toString().equals(cardName)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+
+    public boolean hasMeltedEyeballs() {
+        if (!(track instanceof List) || track.isEmpty()) {
+            return false;
+        }
+    
+        // If track is a List, this will work.
+        // return ((List<Card>) track).get(track.size() - 1).toString().equals("SolarFlare");
+    
+        // Alternative approach with Iterator.
+        Iterator<Card> iter = track.iterator();
+        Card lastElement = iter.next();
+        while (iter.hasNext()) {
+            lastElement = iter.next();
+        }
+        return lastElement.toString().equals("SolarFlare");
+    }
+    
+
+    public boolean hasWon() {
+        return this.distanceFromShip() == 0 && this.isAlive();
     }
 
-    /**
-     * Gets the distance of the astronaut from the ship, based on the size of their track.
-     *
-     * @return the distance of the astronaut from the ship
-     */
-    public int distanceFromShip() {
-        return track.size();
-    }
-
-    /**
-     * Determines if the astronaut is alive, based on their remaining oxygen.
-     *
-     * @return true if the astronaut is alive, false otherwise
-     */
     public boolean isAlive() {
         return !oxygens.isEmpty();
     }
 
-    /**
-     * Makes the astronaut breathe by removing the smallest oxygen card and discarding it.
-     *
-     * @param gameEngine the game engine for the current game
-     * @return the total amount of oxygen remaining after breathing
-     */
-    public int breathe(GameEngine gameEngine) {
-        if (!isAlive()) {
-            throw new IllegalStateException("Cannot breathe if the player is already dead.");
+    public Card laserBlast() {
+        if (track.isEmpty()) {
+            return null;
         }
-
-        Oxygen smallestOxygen = oxygens.stream().min(Comparator.comparingInt(Oxygen::getValue)).orElse(null);
-
-        if (smallestOxygen != null) {
-            oxygens.remove(smallestOxygen);
-            gameEngine.discardOxygen(smallestOxygen);
+        Iterator<Card> iter = track.iterator();
+        Card lastElement = iter.next();
+        while (iter.hasNext()) {
+            lastElement = iter.next();
         }
-
-        return oxygenRemaining();
+        iter.remove();
+        return lastElement;
     }
+    
 
-    /**
-     * Gets the total amount of oxygen remaining for the astronaut.
-     *
-     * @return the total amount of oxygen remaining
-     */
     public int oxygenRemaining() {
         return oxygens.stream().mapToInt(Oxygen::getValue).sum();
     }
 
-        /**
-     * Steals a random action card from the astronaut's hand.
-     *
-     * @return the stolen action card
-     * @throws IllegalStateException if the astronaut has no action cards to steal
-     */
+    public Card peekAtTrack() {
+        if (track.isEmpty()) {
+            return null;
+        }
+        Iterator<Card> iter = track.iterator();
+        Card lastElement = iter.next();
+        while (iter.hasNext()) {
+            lastElement = iter.next();
+        }
+        return lastElement;
+    }
+    
+
+    public Oxygen siphon() {
+        for (Oxygen oxygen : this.oxygens) {
+            if (oxygen.getValue() == 1) {
+                this.oxygens.remove(oxygen);
+                return oxygen;
+            }
+        }
+        return null;
+    }
+
     public Card steal() {
         if (actions.isEmpty()) {
             throw new IllegalStateException("No action cards to steal.");
@@ -141,85 +198,14 @@ public class Astronaut implements Comparable<Astronaut> {
         return stolenCard;
     }
 
-    /**
-     * Determines if the astronaut has the Melted Eyeballs status effect, based on the last card in their track.
-     *
-     * @return true if the astronaut has the Melted Eyeballs status effect, false otherwise
-     */
-    public boolean hasMeltedEyeballs() {
-        if (track.isEmpty()) {
-            return false;
-        }
-
-        Card lastCard = track.get(track.size() - 1);
-        return lastCard.getName().equals("SolarFlare");
-    }
-
-    /**
-     * Adds the specified card to the astronaut's hand.
-     *
-     * @param card the card to add
-     */
-    public void addToHand(Card card) {
-        if (card instanceof Oxygen) {
-            oxygens.add((Oxygen) card);
-        } else {
-            actions.add(card);
-        }
-    }
-
-    /**
-     * Gets a string representation of the astronaut's hand.
-     *
-     * @return a string representation of the astronaut's hand
-     */
-    public String getHandStr() {
-        StringBuilder sb = new StringBuilder();
-        for (Card card : actions) {
-            sb.append(card.getName()).append("\n");
-        }
-        for (Oxygen oxygen : oxygens) {
-            sb.append(oxygen.getName()).append("\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * Gets a string representation of the astronaut's actions, including their names and descriptions.
-     *
-     * @return a string representation of the astronaut's actions
-     */
-    public String getActionsStr() {
-        StringBuilder sb = new StringBuilder();
-        for (Card card : actions) {
-            sb.append(card.getName()).append(": ").append(card.getDescription()).append("\n");
-        }
-        return sb.toString();
+    public void swapTrack(Astronaut swapee) {
+        Collection<Card> temp = this.track;
+        this.track = swapee.track;
+        swapee.track = temp;
     }
 
     @Override
-    public int compareTo(Astronaut other) {
-        return this.name.compareTo(other.name);
-    }
-
-    /**
-     * Adds the specified card to the astronaut's track.
-     *
-     * @param card the card to add
-     */
-    public void addToTrack(Card card) {
-        track.add(card);
-    }
-
-    /**
-     * Gets the list of cards in the astronaut's track.
-     *
-     * @return the list of cards in the astronaut's track
-     */
-    public List<Card> getTrack() {
-        return track;
+    public String toString() {
+        return name;
     }
 }
-
-
-    
