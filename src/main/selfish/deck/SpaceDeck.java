@@ -1,8 +1,21 @@
 package selfish.deck;
+<<<<<<< HEAD
 import selfish.GameException;
 public class SpaceDeck extends Deck {
     // attributes, constructors, methods
     private static final long serialVersionUID = 1L;
+=======
+
+import selfish.GameException;
+import java.util.*;
+import java.io.Serializable;
+
+/**
+ * The SpaceDeck class represents a deck of space cards.
+ * It extends the abstract Deck class.
+ */
+public class SpaceDeck extends  Deck implements Serializable{
+>>>>>>> new
 
     public static final String BLANK_SPACE_CARD = "Blank Space";
     public static final String METEOROID_CARD = "Meteoroid";
@@ -15,6 +28,7 @@ public class SpaceDeck extends Deck {
     public static final String USEFUL_JUNK_CARD="Useful junk";
     public static final String MYSTERIOUS_NEBULA_CARD="Mysterious Nebula";
 
+<<<<<<< HEAD
     public SpaceDeck(String path){
         super();
         try {
@@ -24,4 +38,28 @@ public class SpaceDeck extends Deck {
             e.printStackTrace();
         }
     }
+=======
+    private static final long serialVersionUID = 1234567896L; // replace with actual serialVersionUID
+    /**
+     * Constructs a SpaceDeck with an empty list of cards.
+     */
+    public SpaceDeck() {
+        // default constructor
+    }
+    /**
+     * Constructs a SpaceDeck and loads cards from a file at the specified path.
+     * @param path the path to the file containing card data
+     */
+    public SpaceDeck(String path) {
+        try {
+            List<Card> loadedCards = loadCards(path);
+            // TODO: you need to implement how to store these cards
+        } catch (GameException e) {
+            // handle the exception
+        }
+    }
+
+
+    
+>>>>>>> new
 }

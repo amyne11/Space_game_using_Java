@@ -1,5 +1,6 @@
 package selfish;
 
+<<<<<<< HEAD
 import selfish.deck.Oxygen;
 import selfish.deck.Card;
 
@@ -23,11 +24,28 @@ public class Astronaut implements Serializable {
     private Collection<Card> track = new ArrayList<>();
     private static final long serialVersionUID = 1L;
 
+=======
+import java.io.Serializable;
+/**
+ * The Astronaut class represents an astronaut in the game.
+ */
+public class Astronaut implements Serializable{
+    private String name;
+    private GameEngine game;
+    private static final long serialVersionUID = 1234567890L;
+
+    /**
+     * Constructs an Astronaut with the specified name and game.
+     * @param name the name of the astronaut
+     * @param game the game engine
+     */
+>>>>>>> new
     public Astronaut(String name, GameEngine game) {
         this.name = name;
         this.game = game;
     }
 
+<<<<<<< HEAD
     public void addToHand(Card card) {
         if (card instanceof Oxygen) {
             oxygens.add((Oxygen) card);
@@ -204,6 +222,12 @@ public class Astronaut implements Serializable {
         swapee.track = temp;
     }
 
+=======
+    /**
+     * Returns a string representation of the astronaut.
+     * @return a string representation of the astronaut
+     */
+>>>>>>> new
     @Override
     public String toString() {
         return name;
