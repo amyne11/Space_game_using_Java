@@ -1,27 +1,12 @@
 package selfish.deck;
-<<<<<<< HEAD
-
-
-// Oxygen.java
-public class Oxygen extends Card {
-    private static final long serialVersionUID = 3L;
-
-    private int value;
-
-    public Oxygen(int value) {
-        super("Oxygen", "Oxygen card with a value of " + value);
-        this.value = value;
-    }
-
-=======
 import java.io.Serializable;
 /**
  * The Oxygen class represents an oxygen card in the game.
  */
-public class Oxygen extends Card implements Serializable{
+public class Oxygen extends Card implements Serializable {
     private int value;
-    private static final long serialVersionUID = 1234567897L;
-
+    private static final long serialVersionUID = 1234567893L;
+    
     /**
      * Constructs an Oxygen card with the specified value.
      * @param value the value of the oxygen card
@@ -35,26 +20,19 @@ public class Oxygen extends Card implements Serializable{
      * Returns the value of the oxygen card.
      * @return the value of the oxygen card
      */
->>>>>>> new
     public int getValue() {
         return value;
     }
-
-<<<<<<< HEAD
-    @Override
-    public String toString() {
-        return super.toString() + "(" + value + ")";
+    public void setValue(int value) {
+        this.value = value;
     }
-}
-
-=======
     /**
-     * Returns a string representation of the oxygen card.
-     * @return a string representation of the oxygen card
-     */
+ * Provides a String representation of the Oxygen object.
+ *
+ * @return A String in the format "Oxygen(value)", where "value" is replaced by the actual value of the Oxygen object.
+ */
     @Override
     public String toString() {
-        return super.toString() + ", Value: " + value;
-    }
+        return "Oxygen(" + value + ")";
 }
->>>>>>> new
+    }

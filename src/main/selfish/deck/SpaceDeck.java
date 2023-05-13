@@ -1,10 +1,4 @@
 package selfish.deck;
-<<<<<<< HEAD
-import selfish.GameException;
-public class SpaceDeck extends Deck {
-    // attributes, constructors, methods
-    private static final long serialVersionUID = 1L;
-=======
 
 import selfish.GameException;
 import java.util.*;
@@ -14,32 +8,59 @@ import java.io.Serializable;
  * The SpaceDeck class represents a deck of space cards.
  * It extends the abstract Deck class.
  */
-public class SpaceDeck extends  Deck implements Serializable{
->>>>>>> new
+public class SpaceDeck extends Deck {
+    /**
+ * The constant identifier for the "Asteroid field" card.
+ */
+public static final String ASTEROID_FIELD = "Asteroid field";
 
-    public static final String BLANK_SPACE_CARD = "Blank Space";
-    public static final String METEOROID_CARD = "Meteoroid";
-    public static final String WORMHOLE_CARD = "Wormhole";
-    public static final String SOLAR_FLARE_CARD = "Solar Flare";
-    public static final String GRAVITATIONAL_ANOMALY_CARD = "Gravitational Anomaly";
-    public static final String ASTEROID_FIELD_CARD="Asteroid field";
-    public static final String COSMIC_RADIATION_CARD="Cosmic radiation";
-    public static final String HYPERSPACE_CARD="Hyperspace";
-    public static final String USEFUL_JUNK_CARD="Useful junk";
-    public static final String MYSTERIOUS_NEBULA_CARD="Mysterious Nebula";
+/**
+ * The constant identifier for the "Blank space" card.
+ */
+public static final String BLANK_SPACE = "Blank space";
 
-<<<<<<< HEAD
-    public SpaceDeck(String path){
-        super();
-        try {
-            loadCards(path);
-        } catch (GameException e) {
-            System.err.println("Error loading SpaceDeck cards: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-=======
-    private static final long serialVersionUID = 1234567896L; // replace with actual serialVersionUID
+/**
+ * The constant identifier for the "Cosmic radiation" card.
+ */
+public static final String COSMIC_RADIATION = "Cosmic radiation";
+
+/**
+ * The constant identifier for the "Gravitational anomaly" card.
+ */
+public static final String GRAVITATIONAL_ANOMALY = "Gravitational anomaly";
+
+/**
+ * The constant identifier for the "Hyperspace" card.
+ */
+public static final String HYPERSPACE = "Hyperspace";
+
+/**
+ * The constant identifier for the "Meteoroid" card.
+ */
+public static final String METEOROID = "Meteoroid";
+
+/**
+ * The constant identifier for the "Mysterious nebula" card.
+ */
+public static final String MYSTERIOUS_NEBULA = "Mysterious nebula";
+
+/**
+ * The constant identifier for the "Solar flare" card.
+ */
+public static final String SOLAR_FLARE = "Solar flare";
+
+/**
+ * The constant identifier for the "Useful junk" card.
+ */
+public static final String USEFUL_JUNK = "Useful junk";
+
+/**
+ * The constant identifier for the "Wormhole" card.
+ */
+public static final String WORMHOLE = "Wormhole";
+
+    private static final long serialVersionUID = 1234567894L;
+
     /**
      * Constructs a SpaceDeck with an empty list of cards.
      */
@@ -52,14 +73,10 @@ public class SpaceDeck extends  Deck implements Serializable{
      */
     public SpaceDeck(String path) {
         try {
-            List<Card> loadedCards = loadCards(path);
+            Collection<Card> loadedCards = loadCards(path);
             // TODO: you need to implement how to store these cards
         } catch (GameException e) {
             // handle the exception
         }
     }
-
-
-    
->>>>>>> new
 }
