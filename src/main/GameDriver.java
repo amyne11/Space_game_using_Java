@@ -2,7 +2,7 @@ public class GameDriver {
 
     /**
      * A helper function to centre text in a longer String.
-     * @param width The length of the return String.
+     * @param width The length of the return Str
      * @param s The text to centre.
      * @return A longer string with the specified text centred.
      */
